@@ -61,4 +61,4 @@ flutter:
   # see https://flutter.io/custom-fonts/#from-packages
 
 environment:
-  sdk: '>=2.10.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'

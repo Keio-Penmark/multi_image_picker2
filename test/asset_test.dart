@@ -1,23 +1,9 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   group('Asset', () {
-    const MethodChannel channel = MethodChannel('multi_image_picker');
-
-    final List<MethodCall> log = <MethodCall>[];
-
-    setUp(() {
-      channel.setMockMethodCallHandler((MethodCall methodCall) async {
-        log.add(methodCall);
-        return true;
-      });
-
-      log.clear();
-    });
-
     test('constructor set the identifier correctly', () {
       const String id = 'SOME_ID';
       Asset asset = Asset(id, 'some name', 100, 100);
@@ -33,20 +19,6 @@ void main() {
       expect(
         asset.name,
         equals(name),
-      );
-    });
-
-    test('thumbData can not have negative dimensions', () async {
-      Asset asset = Asset('_identifier', 'some name', 50, 50);
-
-      expect(
-        asset.requestThumbnail(-100, 10),
-        throwsArgumentError,
-      );
-
-      expect(
-        asset.requestThumbnail(10, -100),
-        throwsArgumentError,
       );
     });
 

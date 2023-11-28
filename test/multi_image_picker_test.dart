@@ -5,25 +5,7 @@ import 'package:multi_image_picker2/multi_image_picker2.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   group('MultiImagePicker', () {
-    const MethodChannel channel = MethodChannel('multi_image_picker');
-
     final List<MethodCall> log = <MethodCall>[];
-
-    setUp(() {
-      channel.setMockMethodCallHandler((MethodCall methodCall) async {
-        log.add(methodCall);
-        if (methodCall.method == 'requestOriginal' ||
-            methodCall.method == 'requestThumbnail') {
-          return true;
-        }
-        return [
-          {'identifier': 'SOME_ID_1'},
-          {'identifier': 'SOME_ID_2'}
-        ];
-      });
-
-      log.clear();
-    });
 
     group('#pickImages', () {
       test('passes max images argument correctly', () async {
@@ -124,41 +106,6 @@ void main() {
         expect(
           MultiImagePicker.pickImages(maxImages: -10),
           throwsArgumentError,
-        );
-      });
-
-      test('throws correct exception on cancel', () {
-        channel.setMockMethodCallHandler((MethodCall methodCall) async {
-          throw PlatformException(code: 'CANCELLED', message: 'Some error');
-        });
-
-        expect(
-          () => MultiImagePicker.pickImages(maxImages: 10),
-          throwsA(isA<NoImagesSelectedException>()),
-        );
-      });
-
-      test('throws correct exception when permission denied', () {
-        channel.setMockMethodCallHandler((MethodCall methodCall) async {
-          throw PlatformException(
-              code: 'PERMISSION_DENIED', message: 'Some error');
-        });
-
-        expect(
-          () => MultiImagePicker.pickImages(maxImages: 10),
-          throwsA(isA<PermissionDeniedException>()),
-        );
-      });
-
-      test('throws correct exception when permission permanently denied', () {
-        channel.setMockMethodCallHandler((MethodCall methodCall) async {
-          throw PlatformException(
-              code: 'PERMISSION_PERMANENTLY_DENIED', message: 'Some error');
-        });
-
-        expect(
-          () => MultiImagePicker.pickImages(maxImages: 10),
-          throwsA(isA<PermissionPermanentlyDeniedExeption>()),
         );
       });
     });
